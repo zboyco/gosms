@@ -14,7 +14,7 @@ import (
 )
 
 // SingleSend 发送单条短信
-func (s *Sender) SingleSend(sign string, countryCode int, mobile string, tplID int, params ...string) error {
+func (s *Sender) SingleSend(sign string, countryCode int, mobile string, tplID int, params ...string) (*SingleResult, error) {
 	obj := single{
 		Ext:    strconv.Itoa(rand.Int()),
 		Params: params,
@@ -39,20 +39,20 @@ func (s *Sender) SingleSend(sign string, countryCode int, mobile string, tplID i
 
 	body, err := httpSend(url, jsonBytes)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	result := singleResult{}
+	result := SingleResult{}
 	json.Unmarshal(body, &result)
 
 	if result.Result != 0 {
-		return errors.New(string(body))
+		return &result, errors.New(result.ErrMsg)
 	}
-	return nil
+	return &result, nil
 }
 
 // MultiSend 统一国家码群发短信
-func (s *Sender) MultiSend(sign string, countryCode int, mobiles []string, tplID int, params ...string) error {
+func (s *Sender) MultiSend(sign string, countryCode int, mobiles []string, tplID int, params ...string) (*MultiResult, error) {
 	telphones := []smsmodels.Telphone{}
 	for _, v := range mobiles {
 		telphones = append(telphones, smsmodels.Telphone{
@@ -64,7 +64,7 @@ func (s *Sender) MultiSend(sign string, countryCode int, mobiles []string, tplID
 }
 
 // MultiSendEachCC 各自国家码群发短信
-func (s *Sender) MultiSendEachCC(sign string, telphones []smsmodels.Telphone, tplID int, params ...string) error {
+func (s *Sender) MultiSendEachCC(sign string, telphones []smsmodels.Telphone, tplID int, params ...string) (*MultiResult, error) {
 	obj := multi{
 		Ext:    strconv.Itoa(rand.Int()),
 		Params: params,
@@ -95,16 +95,16 @@ func (s *Sender) MultiSendEachCC(sign string, telphones []smsmodels.Telphone, tp
 
 	body, err := httpSend(url, jsonBytes)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	result := multiResult{}
+	result := MultiResult{}
 	json.Unmarshal(body, &result)
 
 	if result.Result != 0 {
-		return errors.New(string(body))
+		return &result, errors.New(result.ErrMsg)
 	}
-	return nil
+	return &result, nil
 }
 
 // PullSingleStatus  拉取单个号码短信下发状态

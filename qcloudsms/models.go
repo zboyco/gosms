@@ -12,6 +12,8 @@ type tel struct {
 	Nationcode string `json:"nationcode"` // 国家码
 }
 
+/* 短信 Start */
+
 // single 单发短信
 type single struct {
 	Ext    string   `json:"ext"`
@@ -24,8 +26,8 @@ type single struct {
 	TplID  int      `json:"tpl_id"`
 }
 
-// singleResult 单发回复
-type singleResult struct {
+// SingleResult 单发回复
+type SingleResult struct {
 	Result int    `json:"result"`
 	ErrMsg string `json:"errmsg"`
 	Ext    string `json:"ext"`
@@ -45,8 +47,8 @@ type multi struct {
 	TplID  int      `json:"tpl_id"`
 }
 
-// multiResult 群发回复
-type multiResult struct {
+// MultiResult 群发回复
+type MultiResult struct {
 	Result int                 `json:"result"`
 	ErrMsg string              `json:"errmsg"`
 	Ext    string              `json:"ext"`
@@ -120,3 +122,24 @@ type ReplyMessage struct {
 	Text       string `json:"text"`
 	Time       int64  `json:"time"`
 }
+
+/* 短信 End */
+
+/* 语音 Start */
+type voiceCaptcha struct {
+	Ext       string `json:"ext"`
+	Msg       string `json:"msg"`
+	PlayTimes int    `json:"playtimes"`
+	Sig       string `json:"sig"`
+	Tel       *tel   `json:"tel"`
+	Time      int64  `json:"time"`
+}
+
+type voiceResult struct {
+	Result int    `json:"result"`
+	ErrMsg string `json:"errmsg"`
+	CallID string `json:"callid"`
+	Ext    string `json:"ext"`
+}
+
+/* 语音 End */
