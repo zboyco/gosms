@@ -11,7 +11,8 @@ import (
 	"time"
 )
 
-// VoiceSendCaptcha 发送语音验证码(仅支持国内号码，验证码仅支持数字)
+// VoiceSendCaptcha 发送语音验证码
+// 给国内用户发语音验证码（仅支持数字）
 func (s *Sender) VoiceSendCaptcha(mobile string, playTimes int, code string) (*VoiceResult, error) {
 	obj := voiceCaptcha{
 		Ext:       strconv.Itoa(rand.Int()),
@@ -30,7 +31,7 @@ func (s *Sender) VoiceSendCaptcha(mobile string, playTimes int, code string) (*V
 	sigBytes := sha256.Sum256([]byte(sigStr))
 	obj.Sig = hex.EncodeToString(sigBytes[:])
 
-	jsonBytes, _ := json.Marshal(obj)
+	jsonBytes, _ := json.Marshal(&obj)
 
 	url := fmt.Sprintf("https://cloud.tim.qq.com/v5/tlsvoicesvr/sendcvoice?sdkappid=%v&random=%v", s.AppID, strRand)
 
@@ -48,7 +49,8 @@ func (s *Sender) VoiceSendCaptcha(mobile string, playTimes int, code string) (*V
 	return &result, nil
 }
 
-// VoiceSendPrompt 发送语音通知(仅支持国内号码，验证码仅支持数字)
+// VoiceSendPrompt 发送语音通知
+// 给国内用户发语音通知（支持中文、英文字母、数字及组合，内容长度不超过100字）
 func (s *Sender) VoiceSendPrompt(mobile string, playTimes int, promptfile string) (*VoiceResult, error) {
 	obj := voicePrompt{
 		Ext:        strconv.Itoa(rand.Int()),
@@ -68,7 +70,7 @@ func (s *Sender) VoiceSendPrompt(mobile string, playTimes int, promptfile string
 	sigBytes := sha256.Sum256([]byte(sigStr))
 	obj.Sig = hex.EncodeToString(sigBytes[:])
 
-	jsonBytes, _ := json.Marshal(obj)
+	jsonBytes, _ := json.Marshal(&obj)
 
 	url := fmt.Sprintf("https://cloud.tim.qq.com/v5/tlsvoicesvr/sendvoiceprompt?sdkappid=%v&random=%v", s.AppID, strRand)
 

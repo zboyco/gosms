@@ -33,7 +33,7 @@ func (s *Sender) SingleSend(sign string, countryCode int, mobile string, tplID i
 	sigBytes := sha256.Sum256([]byte(sigStr))
 	obj.Sig = hex.EncodeToString(sigBytes[:])
 
-	jsonBytes, _ := json.Marshal(obj)
+	jsonBytes, _ := json.Marshal(&obj)
 
 	url := fmt.Sprintf("https://yun.tim.qq.com/v5/tlssmssvr/sendsms?sdkappid=%v&random=%v", s.AppID, strRand)
 
@@ -89,7 +89,7 @@ func (s *Sender) MultiSendEachCC(sign string, telphones []smsmodels.Telphone, tp
 	sigBytes := sha256.Sum256([]byte(strSig))
 	obj.Sig = hex.EncodeToString(sigBytes[:])
 
-	jsonBytes, _ := json.Marshal(obj)
+	jsonBytes, _ := json.Marshal(&obj)
 
 	url := fmt.Sprintf("https://yun.tim.qq.com/v5/tlssmssvr/sendmultisms2?sdkappid=%v&random=%v", s.AppID, strRand)
 
@@ -136,7 +136,7 @@ func (s *Sender) PullSingleStatus(countryCode int, moblie string, beginTimeStr s
 	sigBytes := sha256.Sum256([]byte(strSig))
 	obj.Sig = hex.EncodeToString(sigBytes[:])
 
-	jsonBytes, _ := json.Marshal(obj)
+	jsonBytes, _ := json.Marshal(&obj)
 
 	url := fmt.Sprintf("https://yun.tim.qq.com/v5/tlssmssvr/pullstatus4mobile?sdkappid=%v&random=%v", s.AppID, strRand)
 
@@ -145,14 +145,12 @@ func (s *Sender) PullSingleStatus(countryCode int, moblie string, beginTimeStr s
 		return nil, err
 	}
 
-	fmt.Println(string(body))
-
 	result := PullStatusResult{}
 
 	json.Unmarshal(body, &result)
 
 	if result.Result != 0 {
-		return nil, errors.New(string(body))
+		return nil, errors.New(result.ErrMsg)
 	}
 	return &result, nil
 }
@@ -186,7 +184,7 @@ func (s *Sender) PullSingleReply(countryCode int, moblie string, beginTimeStr st
 	sigBytes := sha256.Sum256([]byte(strSig))
 	obj.Sig = hex.EncodeToString(sigBytes[:])
 
-	jsonBytes, _ := json.Marshal(obj)
+	jsonBytes, _ := json.Marshal(&obj)
 
 	url := fmt.Sprintf("https://yun.tim.qq.com/v5/tlssmssvr/pullstatus4mobile?sdkappid=%v&random=%v", s.AppID, strRand)
 
@@ -200,7 +198,7 @@ func (s *Sender) PullSingleReply(countryCode int, moblie string, beginTimeStr st
 	json.Unmarshal(body, &result)
 
 	if result.Result != 0 {
-		return nil, errors.New(string(body))
+		return nil, errors.New(result.ErrMsg)
 	}
 	return &result, nil
 }
@@ -222,7 +220,7 @@ func (s *Sender) PullStatus(max int) (*PullStatusResult, error) {
 	sigBytes := sha256.Sum256([]byte(strSig))
 	obj.Sig = hex.EncodeToString(sigBytes[:])
 
-	jsonBytes, _ := json.Marshal(obj)
+	jsonBytes, _ := json.Marshal(&obj)
 
 	url := fmt.Sprintf("https://yun.tim.qq.com/v5/tlssmssvr/pullstatus?sdkappid=%v&random=%v", s.AppID, strRand)
 
@@ -231,14 +229,12 @@ func (s *Sender) PullStatus(max int) (*PullStatusResult, error) {
 		return nil, err
 	}
 
-	fmt.Println(string(body))
-
 	result := PullStatusResult{}
 
 	json.Unmarshal(body, &result)
 
 	if result.Result != 0 {
-		return nil, errors.New(string(body))
+		return nil, errors.New(result.ErrMsg)
 	}
 	return &result, nil
 }
@@ -260,7 +256,7 @@ func (s *Sender) PullReply(max int) (*PullReplyResult, error) {
 	sigBytes := sha256.Sum256([]byte(strSig))
 	obj.Sig = hex.EncodeToString(sigBytes[:])
 
-	jsonBytes, _ := json.Marshal(obj)
+	jsonBytes, _ := json.Marshal(&obj)
 
 	url := fmt.Sprintf("https://yun.tim.qq.com/v5/tlssmssvr/pullstatus?sdkappid=%v&random=%v", s.AppID, strRand)
 
@@ -274,7 +270,7 @@ func (s *Sender) PullReply(max int) (*PullReplyResult, error) {
 	json.Unmarshal(body, &result)
 
 	if result.Result != 0 {
-		return nil, errors.New(string(body))
+		return nil, errors.New(result.ErrMsg)
 	}
 	return &result, nil
 }
