@@ -126,6 +126,8 @@ type ReplyMessage struct {
 /* 短信 End */
 
 /* 语音 Start */
+
+// 语音验证码
 type voiceCaptcha struct {
 	Ext       string `json:"ext"`
 	Msg       string `json:"msg"`
@@ -135,7 +137,19 @@ type voiceCaptcha struct {
 	Time      int64  `json:"time"`
 }
 
-type voiceResult struct {
+// 语音通知
+type voicePrompt struct {
+	Ext        string `json:"ext"`
+	Promptfile string `json:"promptfile"`
+	Prompttype int    `json:"prompttype"`
+	PlayTimes  int    `json:"playtimes"`
+	Sig        string `json:"sig"`
+	Tel        *tel   `json:"tel"`
+	Time       int64  `json:"time"`
+}
+
+// VoiceResult 语音验证码和通知返回
+type VoiceResult struct {
 	Result int    `json:"result"`
 	ErrMsg string `json:"errmsg"`
 	CallID string `json:"callid"`
