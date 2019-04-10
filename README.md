@@ -25,12 +25,12 @@ package main
 import (
 	"fmt"
 
-	"github.com/zboyco/gosms/qcloudsms"
+	"github.com/zboyco/gosms"
 )
 
 func main() {
 	// 创建Sender
-	sender := &qcloudsms.Sender{
+	sender := &gosms.QSender{
 		AppID:  "1234567890",                       // appid
 		AppKey: "12345678901234567890123456789000", // appkey
 	}
@@ -62,12 +62,12 @@ package main
 import (
 	"fmt"
 
-	"github.com/zboyco/gosms/qcloudsms"
+	"github.com/zboyco/gosms"
 )
 
 func main() {
 	// 创建Sender
-	sender := &qcloudsms.Sender{
+	sender := &gosms.QSender{
 		AppID:  "1234567890",                       // appid
 		AppKey: "12345678901234567890123456789000", // appkey
 	}
@@ -103,13 +103,13 @@ package main
 import (
 	"fmt"
 
-	"github.com/zboyco/gosms/qcloudsms"
+	"github.com/zboyco/gosms"
 	"github.com/zboyco/gosms/smsmodels"
 )
 
 func main() {
 	// 创建Sender
-	sender := &qcloudsms.Sender{
+	sender := &gosms.QSender{
 		AppID:  "1234567890",                       // appid
 		AppKey: "12345678901234567890123456789000", // appkey
 	}
@@ -117,12 +117,12 @@ func main() {
 	// 各自国家码群发短信
 	res, err := sender.MultiSendEachCC(
 		"短信签名", // 短信签名，此处应填写审核通过的签名内容，非签名 ID，如果使用默认签名，该字段填 ""
-		[]smsmodels.Telphone{
-			smsmodels.Telphone{
+		[]Telphone{
+			Telphone{
 				Phone: "13800000000", // 手机号
 				CC:    86,            // 国家号
 			},
-			smsmodels.Telphone{
+			Telphone{
 				Phone: "13800000000", // 手机号
 				CC:    86,            // 国家号
 			},
@@ -147,12 +147,12 @@ package main
 import (
 	"fmt"
 
-	"github.com/zboyco/gosms/qcloudsms"
+	"github.com/zboyco/gosms"
 )
 
 func main() {
 	// 创建Sender
-	sender := &qcloudsms.Sender{
+	sender := &gosms.QSender{
 		AppID:  "1234567890",                       // appid
 		AppKey: "12345678901234567890123456789000", // appkey
 	}
@@ -182,12 +182,12 @@ package main
 import (
 	"fmt"
 
-	"github.com/zboyco/gosms/qcloudsms"
+	"github.com/zboyco/gosms"
 )
 
 func main() {
 	// 创建Sender
-	sender := &qcloudsms.Sender{
+	sender := &gosms.QSender{
 		AppID:  "1234567890",                       // appid
 		AppKey: "12345678901234567890123456789000", // appkey
 	}
@@ -209,12 +209,12 @@ package main
 import (
 	"fmt"
 
-	"github.com/zboyco/gosms/qcloudsms"
+	"github.com/zboyco/gosms"
 )
 
 func main() {
 	// 创建Sender
-	sender := &qcloudsms.Sender{
+	sender := &gosms.QSender{
 		AppID:  "1234567890",                       // appid
 		AppKey: "12345678901234567890123456789000", // appkey
 	}
@@ -244,12 +244,12 @@ package main
 import (
 	"fmt"
 
-	"github.com/zboyco/gosms/qcloudsms"
+	"github.com/zboyco/gosms"
 )
 
 func main() {
 	// 创建Sender
-	sender := &qcloudsms.Sender{
+	sender := &gosms.QSender{
 		AppID:  "1234567890",                       // appid
 		AppKey: "12345678901234567890123456789000", // appkey
 	}
@@ -271,12 +271,12 @@ package main
 import (
 	"fmt"
 
-	"github.com/zboyco/gosms/qcloudsms"
+	"github.com/zboyco/gosms"
 )
 
 func main() {
 	// 创建Sender
-	sender := &qcloudsms.Sender{
+	sender := &gosms.QSender{
 		AppID:  "1234567890",                       // appid
 		AppKey: "12345678901234567890123456789000", // appkey
 	}
@@ -303,12 +303,12 @@ package main
 import (
 	"fmt"
 
-	"github.com/zboyco/gosms/qcloudsms"
+	"github.com/zboyco/gosms"
 )
 
 func main() {
 	// 创建Sender
-	sender := &qcloudsms.Sender{
+	sender := &gosms.QSender{
 		AppID:  "1234567890",                       // appid
 		AppKey: "12345678901234567890123456789000", // appkey
 	}

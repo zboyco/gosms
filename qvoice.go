@@ -1,4 +1,4 @@
-package qcloudsms
+package gosms
 
 import (
 	"crypto/sha256"
@@ -13,12 +13,12 @@ import (
 
 // VoiceSendCaptcha 发送语音验证码
 // 给国内用户发语音验证码（仅支持数字）
-func (s *Sender) VoiceSendCaptcha(mobile string, playTimes int, code string) (*VoiceResult, error) {
-	obj := voiceCaptcha{
+func (s *QSender) VoiceSendCaptcha(mobile string, playTimes int, code string) (*QVoiceResult, error) {
+	obj := qVoiceCaptcha{
 		Ext:       strconv.Itoa(rand.Int()),
 		Msg:       code,
 		PlayTimes: playTimes,
-		Tel: &tel{
+		Tel: &qTel{
 			Mobile:     mobile,
 			Nationcode: "86",
 		},
@@ -40,7 +40,7 @@ func (s *Sender) VoiceSendCaptcha(mobile string, playTimes int, code string) (*V
 		return nil, err
 	}
 
-	result := VoiceResult{}
+	result := QVoiceResult{}
 	json.Unmarshal(body, &result)
 
 	if result.Result != 0 {
@@ -51,13 +51,13 @@ func (s *Sender) VoiceSendCaptcha(mobile string, playTimes int, code string) (*V
 
 // VoiceSendPrompt 发送语音通知
 // 给国内用户发语音通知（支持中文、英文字母、数字及组合，内容长度不超过100字）
-func (s *Sender) VoiceSendPrompt(mobile string, playTimes int, promptfile string) (*VoiceResult, error) {
-	obj := voicePrompt{
+func (s *QSender) VoiceSendPrompt(mobile string, playTimes int, promptfile string) (*QVoiceResult, error) {
+	obj := qVoicePrompt{
 		Ext:        strconv.Itoa(rand.Int()),
 		Promptfile: promptfile,
 		PlayTimes:  playTimes,
 		Prompttype: 2,
-		Tel: &tel{
+		Tel: &qTel{
 			Mobile:     mobile,
 			Nationcode: "86",
 		},
@@ -79,7 +79,7 @@ func (s *Sender) VoiceSendPrompt(mobile string, playTimes int, promptfile string
 		return nil, err
 	}
 
-	result := VoiceResult{}
+	result := QVoiceResult{}
 	json.Unmarshal(body, &result)
 
 	if result.Result != 0 {

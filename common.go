@@ -1,4 +1,4 @@
-package smsmodels
+package gosms
 
 // Telphone 手机号模型
 type Telphone struct {

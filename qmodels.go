@@ -1,13 +1,13 @@
-package qcloudsms
+package gosms
 
-// Sender 发送模型
-type Sender struct {
+// QSender 发送模型
+type QSender struct {
 	AppID  string
 	AppKey string
 }
 
 // Tel 电话
-type tel struct {
+type qTel struct {
 	Mobile     string `json:"mobile"`     // 手机号码
 	Nationcode string `json:"nationcode"` // 国家码
 }
@@ -15,19 +15,19 @@ type tel struct {
 /* 短信 Start */
 
 // single 单发短信
-type single struct {
+type qSingle struct {
 	Ext    string   `json:"ext"`
 	Extend string   `json:"extend"`
 	Params []string `json:"params"`
 	Sig    string   `json:"sig"`
 	Sign   string   `json:"sign"`
-	Tel    *tel     `json:"tel"`
+	Tel    *qTel    `json:"tel"`
 	Time   int64    `json:"time"`
 	TplID  int      `json:"tpl_id"`
 }
 
-// SingleResult 单发回复
-type SingleResult struct {
+// QSingleResult 单发回复
+type QSingleResult struct {
 	Result int    `json:"result"`
 	ErrMsg string `json:"errmsg"`
 	Ext    string `json:"ext"`
@@ -36,28 +36,28 @@ type SingleResult struct {
 }
 
 // multi 群发短信
-type multi struct {
+type qMulti struct {
 	Ext    string   `json:"ext"`
 	Extend string   `json:"extend"`
 	Params []string `json:"params"`
 	Sig    string   `json:"sig"`
 	Sign   string   `json:"sign"`
-	Tel    []tel    `json:"tel"`
+	Tel    []qTel   `json:"tel"`
 	Time   int64    `json:"time"`
 	TplID  int      `json:"tpl_id"`
 }
 
-// MultiResult 群发回复
-type MultiResult struct {
-	Result int                 `json:"result"`
-	ErrMsg string              `json:"errmsg"`
-	Ext    string              `json:"ext"`
-	Detail []multiResultDetail `json:"detail"`
-	Sid    string              `json:"sid"`
+// QMultiResult 群发回复
+type QMultiResult struct {
+	Result int                  `json:"result"`
+	ErrMsg string               `json:"errmsg"`
+	Ext    string               `json:"ext"`
+	Detail []qMultiResultDetail `json:"detail"`
+	Sid    string               `json:"sid"`
 }
 
 // 群发回复详情
-type multiResultDetail struct {
+type qMultiResultDetail struct {
 	Result     int    `json:"result"`
 	ErrMsg     string `json:"errmsg"`
 	Fee        int    `json:"fee"`
@@ -67,7 +67,7 @@ type multiResultDetail struct {
 }
 
 // 拉取短信状态请求
-type pullInfo struct {
+type qPullInfo struct {
 	Max  int    `json:"max"`
 	Sig  string `json:"sig"`
 	Time int64  `json:"time"`
@@ -75,7 +75,7 @@ type pullInfo struct {
 }
 
 // 拉取单个手机短信状态
-type pullSingleInfo struct {
+type qPullSingleInfo struct {
 	BeginTime  int64  `json:"begin_time"`
 	EndTime    int64  `json:"end_time"`
 	Max        int    `json:"max"`
@@ -86,24 +86,24 @@ type pullSingleInfo struct {
 	Type       int    `json:"type"`
 }
 
-// PullStatusResult 拉取短信状态结果
-type PullStatusResult struct {
-	Count  int          `json:"count"`
-	Data   []SendStatus `json:"data"`
-	ErrMsg string       `json:"errmsg"`
-	Result int          `json:"result"`
+// QPullStatusResult 拉取短信状态结果
+type QPullStatusResult struct {
+	Count  int           `json:"count"`
+	Data   []QSendStatus `json:"data"`
+	ErrMsg string        `json:"errmsg"`
+	Result int           `json:"result"`
 }
 
-// PullReplyResult 拉取短信状态结果
-type PullReplyResult struct {
-	Count  int            `json:"count"`
-	Data   []ReplyMessage `json:"data"`
-	ErrMsg string         `json:"errmsg"`
-	Result int            `json:"result"`
+// QPullReplyResult 拉取短信状态结果
+type QPullReplyResult struct {
+	Count  int             `json:"count"`
+	Data   []QReplyMessage `json:"data"`
+	ErrMsg string          `json:"errmsg"`
+	Result int             `json:"result"`
 }
 
-// SendStatus 短信状态
-type SendStatus struct {
+// QSendStatus 短信状态
+type QSendStatus struct {
 	UserReceiveTime string `json:"user_receive_time"`
 	Nationcode      string `json:"nationcode"`
 	Mobile          string `json:"mobile"`
@@ -113,8 +113,8 @@ type SendStatus struct {
 	Sid             string `json:"sid"`
 }
 
-// ReplyMessage 回复消息
-type ReplyMessage struct {
+// QReplyMessage 回复消息
+type QReplyMessage struct {
 	Extend     string `json:"extend"`
 	Mobile     string `json:"mobile"`
 	Nationcode string `json:"nationcode"`
@@ -128,28 +128,28 @@ type ReplyMessage struct {
 /* 语音 Start */
 
 // 语音验证码
-type voiceCaptcha struct {
+type qVoiceCaptcha struct {
 	Ext       string `json:"ext"`
 	Msg       string `json:"msg"`
 	PlayTimes int    `json:"playtimes"`
 	Sig       string `json:"sig"`
-	Tel       *tel   `json:"tel"`
+	Tel       *qTel  `json:"tel"`
 	Time      int64  `json:"time"`
 }
 
 // 语音通知
-type voicePrompt struct {
+type qVoicePrompt struct {
 	Ext        string `json:"ext"`
 	Promptfile string `json:"promptfile"`
 	Prompttype int    `json:"prompttype"`
 	PlayTimes  int    `json:"playtimes"`
 	Sig        string `json:"sig"`
-	Tel        *tel   `json:"tel"`
+	Tel        *qTel  `json:"tel"`
 	Time       int64  `json:"time"`
 }
 
-// VoiceResult 语音验证码和通知返回
-type VoiceResult struct {
+// QVoiceResult 语音验证码和通知返回
+type QVoiceResult struct {
 	Result int    `json:"result"`
 	ErrMsg string `json:"errmsg"`
 	CallID string `json:"callid"`

@@ -1,4 +1,4 @@
-package qcloudsms
+package gosms
 
 import (
 	"bytes"

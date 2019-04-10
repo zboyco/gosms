@@ -1,4 +1,4 @@
-package qcloudsms
+package gosms
 
 import (
 	"crypto/sha256"
@@ -9,17 +9,15 @@ import (
 	"math/rand"
 	"strconv"
 	"time"
-
-	"github.com/zboyco/gosms/smsmodels"
 )
 
 // SingleSend 发送单条短信
-func (s *Sender) SingleSend(sign string, countryCode int, mobile string, tplID int, params ...string) (*SingleResult, error) {
-	obj := single{
+func (s *QSender) SingleSend(sign string, countryCode int, mobile string, tplID int, params ...string) (*QSingleResult, error) {
+	obj := qSingle{
 		Ext:    strconv.Itoa(rand.Int()),
 		Params: params,
 		Sign:   sign,
-		Tel: &tel{
+		Tel: &qTel{
 			Mobile:     mobile,
 			Nationcode: strconv.Itoa(countryCode),
 		},
@@ -42,7 +40,7 @@ func (s *Sender) SingleSend(sign string, countryCode int, mobile string, tplID i
 		return nil, err
 	}
 
-	result := SingleResult{}
+	result := QSingleResult{}
 	json.Unmarshal(body, &result)
 
 	if result.Result != 0 {
@@ -52,10 +50,10 @@ func (s *Sender) SingleSend(sign string, countryCode int, mobile string, tplID i
 }
 
 // MultiSend 统一国家码群发短信
-func (s *Sender) MultiSend(sign string, countryCode int, mobiles []string, tplID int, params ...string) (*MultiResult, error) {
-	telphones := []smsmodels.Telphone{}
+func (s *QSender) MultiSend(sign string, countryCode int, mobiles []string, tplID int, params ...string) (*QMultiResult, error) {
+	telphones := []Telphone{}
 	for _, v := range mobiles {
-		telphones = append(telphones, smsmodels.Telphone{
+		telphones = append(telphones, Telphone{
 			Phone: v,
 			CC:    countryCode,
 		})
@@ -64,19 +62,19 @@ func (s *Sender) MultiSend(sign string, countryCode int, mobiles []string, tplID
 }
 
 // MultiSendEachCC 各自国家码群发短信
-func (s *Sender) MultiSendEachCC(sign string, telphones []smsmodels.Telphone, tplID int, params ...string) (*MultiResult, error) {
-	obj := multi{
+func (s *QSender) MultiSendEachCC(sign string, telphones []Telphone, tplID int, params ...string) (*QMultiResult, error) {
+	obj := qMulti{
 		Ext:    strconv.Itoa(rand.Int()),
 		Params: params,
 		Sign:   sign,
 		Time:   time.Now().Unix(),
 		TplID:  tplID,
-		Tel:    []tel{},
+		Tel:    []qTel{},
 	}
 
 	strMobile := ""
 	for i := range telphones {
-		obj.Tel = append(obj.Tel, tel{
+		obj.Tel = append(obj.Tel, qTel{
 			Mobile:     telphones[i].Phone,
 			Nationcode: strconv.Itoa(telphones[i].CC),
 		})
@@ -98,7 +96,7 @@ func (s *Sender) MultiSendEachCC(sign string, telphones []smsmodels.Telphone, tp
 		return nil, err
 	}
 
-	result := MultiResult{}
+	result := QMultiResult{}
 	json.Unmarshal(body, &result)
 
 	if result.Result != 0 {
@@ -108,7 +106,7 @@ func (s *Sender) MultiSendEachCC(sign string, telphones []smsmodels.Telphone, tp
 }
 
 // PullSingleStatus  拉取单个号码短信下发状态
-func (s *Sender) PullSingleStatus(countryCode int, moblie string, beginTimeStr string, endTimeStr string, max int) (*PullStatusResult, error) {
+func (s *QSender) PullSingleStatus(countryCode int, moblie string, beginTimeStr string, endTimeStr string, max int) (*QPullStatusResult, error) {
 
 	if max > 100 {
 		return nil, errors.New("最多拉取100条数据")
@@ -121,7 +119,7 @@ func (s *Sender) PullSingleStatus(countryCode int, moblie string, beginTimeStr s
 	if err != nil {
 		return nil, errors.New("endTimeStr 格式不正确 e.g. \"2006-01-02 15:04:05\"")
 	}
-	obj := pullSingleInfo{
+	obj := qPullSingleInfo{
 		BeginTime:  beginTime.Unix(),
 		EndTime:    endTime.Unix(),
 		Mobile:     moblie,
@@ -145,7 +143,7 @@ func (s *Sender) PullSingleStatus(countryCode int, moblie string, beginTimeStr s
 		return nil, err
 	}
 
-	result := PullStatusResult{}
+	result := QPullStatusResult{}
 
 	json.Unmarshal(body, &result)
 
@@ -156,7 +154,7 @@ func (s *Sender) PullSingleStatus(countryCode int, moblie string, beginTimeStr s
 }
 
 // PullSingleReply  拉取单个号码短信回复
-func (s *Sender) PullSingleReply(countryCode int, moblie string, beginTimeStr string, endTimeStr string, max int) (*PullReplyResult, error) {
+func (s *QSender) PullSingleReply(countryCode int, moblie string, beginTimeStr string, endTimeStr string, max int) (*QPullReplyResult, error) {
 
 	if max > 100 {
 		return nil, errors.New("最多拉取100条数据")
@@ -169,7 +167,7 @@ func (s *Sender) PullSingleReply(countryCode int, moblie string, beginTimeStr st
 	if err != nil {
 		return nil, errors.New("endTimeStr 格式不正确 e.g. \"2006-01-02 15:04:05\"")
 	}
-	obj := pullSingleInfo{
+	obj := qPullSingleInfo{
 		BeginTime:  beginTime.Unix(),
 		EndTime:    endTime.Unix(),
 		Mobile:     moblie,
@@ -193,7 +191,7 @@ func (s *Sender) PullSingleReply(countryCode int, moblie string, beginTimeStr st
 		return nil, err
 	}
 
-	result := PullReplyResult{}
+	result := QPullReplyResult{}
 
 	json.Unmarshal(body, &result)
 
@@ -204,12 +202,12 @@ func (s *Sender) PullSingleReply(countryCode int, moblie string, beginTimeStr st
 }
 
 // PullStatus  拉取短信下发状态
-func (s *Sender) PullStatus(max int) (*PullStatusResult, error) {
+func (s *QSender) PullStatus(max int) (*QPullStatusResult, error) {
 
 	if max > 100 {
 		return nil, errors.New("最多拉取100条数据")
 	}
-	obj := pullInfo{
+	obj := qPullInfo{
 		Max:  max,
 		Time: time.Now().Unix(),
 		Type: 0, // Enum{0: 短信下发状态, 1: 短信回复}
@@ -229,7 +227,7 @@ func (s *Sender) PullStatus(max int) (*PullStatusResult, error) {
 		return nil, err
 	}
 
-	result := PullStatusResult{}
+	result := QPullStatusResult{}
 
 	json.Unmarshal(body, &result)
 
@@ -240,12 +238,12 @@ func (s *Sender) PullStatus(max int) (*PullStatusResult, error) {
 }
 
 // PullReply  拉取短信回复
-func (s *Sender) PullReply(max int) (*PullReplyResult, error) {
+func (s *QSender) PullReply(max int) (*QPullReplyResult, error) {
 
 	if max > 100 {
 		return nil, errors.New("最多拉取100条数据")
 	}
-	obj := pullInfo{
+	obj := qPullInfo{
 		Max:  max,
 		Time: time.Now().Unix(),
 		Type: 1, // Enum{0: 短信下发状态, 1: 短信回复}
@@ -265,7 +263,7 @@ func (s *Sender) PullReply(max int) (*PullReplyResult, error) {
 		return nil, err
 	}
 
-	result := PullReplyResult{}
+	result := QPullReplyResult{}
 
 	json.Unmarshal(body, &result)
 
