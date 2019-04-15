@@ -104,7 +104,6 @@ import (
 	"fmt"
 
 	"github.com/zboyco/gosms"
-	"github.com/zboyco/gosms/smsmodels"
 )
 
 func main() {
