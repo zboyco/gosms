@@ -73,7 +73,7 @@ func main() {
 	}
 
 	// 统一国家码群发短信
-	res, err := sender.MultiSendEachCC(
+	res, err := sender.MultiSend(
 		"短信签名", // 短信签名，此处应填写审核通过的签名内容，非签名 ID，如果使用默认签名，该字段填 ""
 		86, // 国家号
 		[]string{
